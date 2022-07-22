@@ -13,7 +13,7 @@ const ConnectWallet = () => {
   return (
     <Dialog.Root>
       <Dialog.DialogTrigger>
-        <button className="px-6 bg-rose-100 shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white bg-opacity-50 ">
+        <div className="px-6 bg-rose-100 shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white bg-opacity-50 ">
           {isConnected ? (
             <span className="flex gap-2">
               <span>{formatedBalance}</span>
@@ -25,7 +25,7 @@ const ConnectWallet = () => {
           ) : (
             <span>Connect Wallet</span>
           )}
-        </button>
+        </div>
       </Dialog.DialogTrigger>
 
       <Dialog.Portal>
