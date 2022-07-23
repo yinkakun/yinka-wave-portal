@@ -4,7 +4,10 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
-import App from "./app";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SwitchNetworkModal from "./components/switch-network";
+import useIsSupportedChain from "./hooks/use-is-supported-chain";
+import Index from "./pages";
 import "./index.css";
 
 const ALCHEMY_ID = import.meta.env.VITE_ALCHEMY_ID;
@@ -48,7 +51,12 @@ const client = createClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <WagmiConfig client={client}>
-      <App />
+      <SwitchNetworkModal />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+        </Routes>
+      </BrowserRouter>
     </WagmiConfig>
   </React.StrictMode>
 );

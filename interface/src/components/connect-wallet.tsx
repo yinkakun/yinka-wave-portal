@@ -29,8 +29,8 @@ const ConnectWallet = () => {
       </Dialog.DialogTrigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-neutral-500 bg-opacity-10 transition-all duration-300 border-2 h-screen z-50 fixed w-full top-0 flex items-center justify-center">
-          <Dialog.Content className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-50 border-2 border-neutral-200">
+        <Dialog.Overlay className="bg-white backdrop-blur-sm bg-opacity-10 transition-all duration-300 border-2 h-screen z-50 fixed w-full top-0 flex items-center justify-center">
+          <Dialog.Content className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-100 border border-rose-200">
             <div className="flex items-center justify-between">
               <Dialog.Title>
                 {isConnected ? "Account" : "Connect Wallet"}

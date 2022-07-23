@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html,
+body,
+#root {
   @apply bg-rose-50 h-full;
 }
