@@ -6,7 +6,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SwitchNetworkModal from "./components/switch-network";
-import useIsSupportedChain from "./hooks/use-is-supported-chain";
+
 import Index from "./pages";
 import "./index.css";
 

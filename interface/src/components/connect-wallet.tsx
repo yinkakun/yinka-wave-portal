@@ -4,6 +4,8 @@ import { useConnect, useDisconnect } from "wagmi";
 import { Connector } from "wagmi";
 import { useCopyToClipboard } from "usehooks-ts";
 
+const RINKEBY_CHAIN_ID = 4;
+
 const ConnectWallet = () => {
   const { isConnected, address } = useAccount();
   const { data: ensName } = useEnsName({ address });
@@ -13,7 +15,7 @@ const ConnectWallet = () => {
   return (
     <Dialog.Root>
       <Dialog.DialogTrigger>
-        <div className="px-6 bg-rose-100 shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white bg-opacity-50 ">
+        <div className="px-6 bg-transparent shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white">
           {isConnected ? (
             <span className="flex gap-2">
               <span>{formatedBalance}</span>
@@ -29,7 +31,7 @@ const ConnectWallet = () => {
       </Dialog.DialogTrigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-white backdrop-blur-sm bg-opacity-10 transition-all duration-300 border-2 h-screen z-50 fixed w-full top-0 flex items-center justify-center">
+        <Dialog.Overlay className="bg-white backdrop-blur-sm bg-opacity-10 transition-all duration-300 border-2 h-screen fixed w-full top-0 flex items-center justify-center">
           <Dialog.Content className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-100 border border-rose-200">
             <div className="flex items-center justify-between">
               <Dialog.Title>
@@ -53,7 +55,9 @@ const ConnectWallet = () => {
 export { ConnectWallet };
 
 const WallletConnectors = () => {
-  const { connect, connectors, isLoading, pendingConnector } = useConnect();
+  const { connect, connectors, isLoading, pendingConnector } = useConnect({
+    chainId: RINKEBY_CHAIN_ID,
+  });
 
   return (
     <div className="flex flex-col gap-2">
