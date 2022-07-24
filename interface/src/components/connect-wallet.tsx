@@ -4,6 +4,9 @@ import { Connector } from "wagmi";
 import { useCopyToClipboard } from "usehooks-ts";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
+import abbreviateETHBalance from "../utils/abbreviate-eth-balance";
+import formatAddress from "../utils/format-address";
+import formatENS from "../utils/format-ens";
 
 const RINKEBY_CHAIN_ID = 4;
 
@@ -12,19 +15,23 @@ const ConnectWallet = () => {
   const { isConnected, address } = useAccount();
   const { data: ensName } = useEnsName({ address });
   const { data: balance } = useBalance({ addressOrName: address });
-  const formatedBalance = parseFloat(balance?.formatted || "0").toFixed(2);
+  const balanceInNumber = parseFloat(balance?.formatted || "0");
+
+  const formattedEns = ensName ? formatENS(ensName) : null;
+  const formattedAddress = address ? formatAddress(address) : null;
 
   return (
     <Fragment>
       <button onClick={() => setIsOpen(true)}>
-        <div className="px-6 bg-transparent shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white">
+        <div className="px-6 bg-white bg-opacity-50 shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white hover:border-rose-300 ease-linear duration-300">
           {isConnected ? (
-            <span className="flex gap-2">
-              <span>{formatedBalance}</span>
-              <span>{balance?.symbol}</span>
-              <span className="max-w-[100px] overflow-hidden whitespace-nowrap truncate">
-                <span>{ensName || address}</span>
-              </span>
+            <span className="flex gap-3">
+              <div>
+                <span>{abbreviateETHBalance(balanceInNumber)}</span>{" "}
+                <span>{balance?.symbol}</span>
+              </div>
+
+              <span>{formattedEns || formattedAddress}</span>
             </span>
           ) : (
             <span>Connect Wallet</span>

@@ -6,4 +6,5 @@ html,
 body,
 #root {
   @apply bg-rose-50 h-full;
+  @apply bg-gradient-to-l from-rose-200 via-orange-200 to-rose-200;
 }

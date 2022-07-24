@@ -7,9 +7,9 @@ const Header = () => {
         <div>
           <a
             href="/"
-            className="text-3xl bg-rose-100 bg-opacity-50 border-white p-1 px-4 rounded-full border-2 flex"
+            className="text-3xl backdrop-blur-sm bg-opacity-50 border-white p-1 px-4 rounded-full border-2 justify-center h-[60px] bg-white w-[60px] flex items-center hover:animate-wiggle"
           >
-            🦄
+            👋🏼
           </a>
         </div>
 
