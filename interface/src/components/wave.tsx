@@ -124,7 +124,10 @@ const SendWave = () => {
           placeholder="Hello Fren!"
           {...register("message", {
             required: "Message cannot be blank",
-            maxLength: 100,
+            maxLength: {
+              value: 140,
+              message: "Message cannot be longer than 140 characters",
+            },
           })}
           className="bg-rose-100  h-full px-2 py-2 grow focus:outline-none text-sm text-neutral-600"
         />
