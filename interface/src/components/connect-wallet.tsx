@@ -1,20 +1,22 @@
-import * as Dialog from "@radix-ui/react-dialog";
 import { useAccount, useEnsName, useBalance } from "wagmi";
 import { useConnect, useDisconnect } from "wagmi";
 import { Connector } from "wagmi";
 import { useCopyToClipboard } from "usehooks-ts";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 
 const RINKEBY_CHAIN_ID = 4;
 
 const ConnectWallet = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { isConnected, address } = useAccount();
   const { data: ensName } = useEnsName({ address });
   const { data: balance } = useBalance({ addressOrName: address });
   const formatedBalance = parseFloat(balance?.formatted || "0").toFixed(2);
 
   return (
-    <Dialog.Root>
-      <Dialog.DialogTrigger>
+    <Fragment>
+      <button onClick={() => setIsOpen(true)}>
         <div className="px-6 bg-transparent shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white">
           {isConnected ? (
             <span className="flex gap-2">
@@ -28,27 +30,48 @@ const ConnectWallet = () => {
             <span>Connect Wallet</span>
           )}
         </div>
-      </Dialog.DialogTrigger>
+      </button>
 
-      <Dialog.Portal>
-        <Dialog.Overlay className="bg-white backdrop-blur-sm bg-opacity-10 transition-all duration-300 border-2 h-screen fixed w-full top-0 flex items-center justify-center">
-          <Dialog.Content className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-100 border border-rose-200">
-            <div className="flex items-center justify-between">
-              <Dialog.Title>
-                {isConnected ? "Account" : "Connect Wallet"}
-              </Dialog.Title>
-              <Dialog.Close className="text-sm rounded-full px-4 p-1 bg-rose-200 text-rose-500">
-                Close
-              </Dialog.Close>
-            </div>
+      <Transition appear as={Fragment} show={isOpen}>
+        <Dialog
+          onClose={() => setIsOpen(false)}
+          className="z-50 justify-center inset-0 fixed flex items-center"
+        >
+          <div
+            className="flex p-4 fixed inset-0 justify-center items-center bg-transparent backdrop-blur-sm transition-all border-4 border-rose-300"
+            aria-hidden="true"
+          />
 
-            <div className="mt-8">
-              {isConnected ? <Address /> : <WallletConnectors />}
-            </div>
-          </Dialog.Content>
-        </Dialog.Overlay>
-      </Dialog.Portal>
-    </Dialog.Root>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <Dialog.Panel className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-100 border border-rose-200">
+              <div className="flex items-center justify-between">
+                <Dialog.Title>
+                  {isConnected ? "Account" : "Connect Wallet"}
+                </Dialog.Title>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-sm rounded-full px-4 p-1 bg-rose-200 text-rose-500"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="mt-8">
+                {isConnected ? <Address /> : <WallletConnectors />}
+              </div>
+            </Dialog.Panel>
+          </Transition.Child>
+        </Dialog>
+      </Transition>
+    </Fragment>
   );
 };
 
