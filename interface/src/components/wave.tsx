@@ -68,16 +68,30 @@ const SendWave = () => {
 
   const waveMessage = watch("message");
 
+  const notifySuccessfulWave = () =>
+    toast.custom(
+      <div className="bg-green-400 py-3 px-3 bg-opacity-80 backdrop-blur border-opacity-50 border border-white text-white text-xs text-center">
+        Wave sent successfully . Thanks for waving at me. WAGMI!
+      </div>
+    );
+
+  const notifyUnsuccessfulWave = () =>
+    toast.custom(
+      <div className="bg-red-600 py-3 px-3 bg-opacity-80 backdrop-blur border-opacity-50 border border-white text-white text-xs text-center">
+        You have to wait for at least 15 mins to send another wave :(
+      </div>
+    );
+
   const { isLoading, write } = useContractWrite({
     ...contractAddressAndAbi,
     functionName: "wave",
     args: [waveMessage],
-    onSuccess(data) {
-      console.log("Success", data);
+    onSuccess() {
+      notifySuccessfulWave();
+      reset();
     },
-    onError(error) {
-      console.log("Error", error.message);
-      // notification package
+    onError() {
+      notifyUnsuccessfulWave();
     },
   });
 
@@ -129,6 +143,7 @@ const SendWave = () => {
           </span>
         )}
       </div>
+      <Toaster position="bottom-center" gutter={8} />
     </div>
   );
 };
