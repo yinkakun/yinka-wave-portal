@@ -1,4 +1,4 @@
-import { ConnectWallet } from "./connect-wallet";
+import { ConnectWalletButton } from "./connect-wallet";
 
 const Header = () => {
   return (
@@ -14,7 +14,7 @@ const Header = () => {
         </div>
 
         <div>
-          <ConnectWallet />
+          <ConnectWalletButton />
         </div>
       </div>
     </header>

@@ -8,21 +8,22 @@ import abbreviateETHBalance from "../utils/abbreviate-eth-balance";
 import formatAddress from "../utils/format-address";
 import formatENS from "../utils/format-ens";
 
-const RINKEBY_CHAIN_ID = 4;
-
-const ConnectWallet = () => {
+const ConnectWalletButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isConnected, address } = useAccount();
-  const { data: ensName } = useEnsName({ address });
   const { data: balance } = useBalance({ addressOrName: address });
+  const { data: ensName } = useEnsName({ address });
   const balanceInNumber = parseFloat(balance?.formatted || "0");
 
   const formattedEns = ensName ? formatENS(ensName) : null;
   const formattedAddress = address ? formatAddress(address) : null;
 
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   return (
     <Fragment>
-      <button onClick={() => setIsOpen(true)}>
+      <button onClick={openModal}>
         <div className="px-6 bg-white bg-opacity-50 shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white hover:border-rose-300 ease-linear duration-300">
           {isConnected ? (
             <span className="flex gap-3">
@@ -38,51 +39,67 @@ const ConnectWallet = () => {
           )}
         </div>
       </button>
-
-      <Transition appear as={Fragment} show={isOpen}>
-        <Dialog
-          onClose={() => setIsOpen(false)}
-          className="z-50 justify-center inset-0 fixed flex items-center"
-        >
-          <div
-            className="flex p-4 fixed inset-0 justify-center items-center bg-transparent backdrop-blur-sm transition-all border-4 border-rose-300"
-            aria-hidden="true"
-          />
-
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <Dialog.Panel className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-100 border border-rose-200">
-              <div className="flex items-center justify-between">
-                <Dialog.Title>
-                  {isConnected ? "Account" : "Connect Wallet"}
-                </Dialog.Title>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-sm rounded-full px-4 p-1 bg-rose-200 text-rose-500"
-                >
-                  Close
-                </button>
-              </div>
-
-              <div className="mt-8">
-                {isConnected ? <Address /> : <WallletConnectors />}
-              </div>
-            </Dialog.Panel>
-          </Transition.Child>
-        </Dialog>
-      </Transition>
+      <ConnectWalletModal isOpen={isOpen} onClose={closeModal} />
     </Fragment>
   );
 };
 
-export { ConnectWallet };
+const RINKEBY_CHAIN_ID = 4;
+
+interface ConnectWalletModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const ConnectWalletModal = ({ isOpen, onClose }: ConnectWalletModalProps) => {
+  const { isConnected } = useAccount();
+
+  return (
+    <Transition appear as={Fragment} show={isOpen}>
+      <Dialog
+        onClose={onClose}
+        className="z-50 justify-center inset-0 fixed flex items-center"
+      >
+        <div
+          className="flex p-4 fixed inset-0 justify-center items-center bg-transparent backdrop-blur-sm transition-all border-4 border-rose-300"
+          aria-hidden="true"
+        />
+
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <Dialog.Panel className="w-full max-w-md py-4 px-4 rounded-2xl bg-rose-100 border border-rose-200">
+            <div className="flex items-center justify-between">
+              <Dialog.Title>
+                {isConnected ? "Account" : "Connect Wallet"}
+              </Dialog.Title>
+              <button
+                onClick={onClose}
+                className="text-sm rounded-full px-4 p-1 bg-rose-200 text-rose-500"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-8">
+              {isConnected ? <Address /> : <WallletConnectors />}
+            </div>
+          </Dialog.Panel>
+        </Transition.Child>
+      </Dialog>
+    </Transition>
+  );
+};
+
+export default ConnectWalletModal;
+
+export { ConnectWalletButton };
 
 const WallletConnectors = () => {
   const { connect, connectors, isLoading, pendingConnector } = useConnect({
