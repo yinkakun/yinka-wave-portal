@@ -5,7 +5,6 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SwitchNetworkModal from "./components/switch-network";
 
 import Index from "./pages";
 import "./index.css";
@@ -51,7 +50,6 @@ const client = createClient({
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <WagmiConfig client={client}>
-      <SwitchNetworkModal />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

@@ -3,11 +3,12 @@ import wavePortalAbi from "../abi/wave-portal.json";
 import useIsSupportedChain from "../hooks/use-is-supported-chain";
 import Marquee from "react-fast-marquee";
 import { formatDistanceToNow } from "date-fns";
-import { useState, Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { BigNumber } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import formatAddress from "../utils/format-address";
+import SwitchNetworkModal from "./switch-network";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
@@ -56,6 +57,10 @@ interface IWaveMessage {
 }
 
 const SendWave = () => {
+  const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
+  const closeSwitchNetworkModal = () => setShowSwitchNetworkModal(false);
+  const openSwitchNetworkModal = () => setShowSwitchNetworkModal(true);
+
   const {
     register,
     handleSubmit,
@@ -65,6 +70,12 @@ const SendWave = () => {
   } = useForm<IWaveMessage>();
   const { isConnected } = useAccount();
   const { isSupportedChain } = useIsSupportedChain();
+
+  useEffect(() => {
+    if (isSupportedChain) {
+      closeSwitchNetworkModal();
+    }
+  }, [isSupportedChain]);
 
   const waveMessage = watch("message");
 
@@ -104,6 +115,7 @@ const SendWave = () => {
 
     if (!isSupportedChain) {
       console.error("Not supported chain");
+      openSwitchNetworkModal();
       // show wrong network modal
       return;
     }
@@ -147,6 +159,10 @@ const SendWave = () => {
         )}
       </div>
       <Toaster position="bottom-center" gutter={8} />
+      <SwitchNetworkModal
+        isOpen={showSwitchNetworkModal}
+        onClose={closeSwitchNetworkModal}
+      />
     </div>
   );
 };

@@ -2,12 +2,14 @@ import useIsSupportedChain from "../hooks/use-is-supported-chain";
 import { Dialog, Transition } from "@headlessui/react";
 import { useAccount, useDisconnect } from "wagmi";
 import { useSwitchNetwork } from "wagmi";
-import { Fragment } from "react";
+import { Fragment, Dispatch, SetStateAction } from "react";
 
-const SwitchNetworkModal = () => {
-  const { isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { isSupportedChain } = useIsSupportedChain();
+interface SwitchNetworkModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SwitchNetworkModal = ({ isOpen, onClose }: SwitchNetworkModalProps) => {
   const { error, isLoading, switchNetwork } = useSwitchNetwork({
     chainId: 4,
   });
@@ -16,14 +18,10 @@ const SwitchNetworkModal = () => {
     if (switchNetwork) switchNetwork();
   };
 
-  if (!isConnected) {
-    return null;
-  }
-
   return (
-    <Transition appear as={Fragment} show={!isSupportedChain}>
+    <Transition appear as={Fragment} show={isOpen}>
       <Dialog
-        onClose={() => {}}
+        onClose={onClose}
         className="fixed z-[100] inset-0 flex items-center justify-center"
       >
         <div
@@ -46,8 +44,8 @@ const SwitchNetworkModal = () => {
                 🟨 Unsupported Network
               </Dialog.Title>
               <Dialog.Description className="text-sm">
-                This dApp only supports Rinkeby testnet. Switch or disconnect to
-                continue.
+                This dApp only supports Rinkeby testnet. Please switch to
+                Rinkeby testnet to continue.
               </Dialog.Description>
             </div>
 
@@ -60,10 +58,10 @@ const SwitchNetworkModal = () => {
               </button>
 
               <button
-                onClick={() => disconnect()}
+                onClick={onClose}
                 className="text-sm rounded-full px-4 py-2 w-full bg-rose-100 border border-rose-300 text-rose-600"
               >
-                Disconnect
+                Dismiss
               </button>
             </div>
 
