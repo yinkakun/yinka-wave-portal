@@ -3,6 +3,7 @@ import SendWave from "../components/send-wave";
 import WaveList from "../components/wave-list";
 import WaveCount from "../components/wave-count";
 import WaveHeader from "../components/wave-header";
+import Footer from "../components/footer";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
         <WaveCount />
         <WaveList />
       </div>
+      <Footer />
     </div>
   );
 };
