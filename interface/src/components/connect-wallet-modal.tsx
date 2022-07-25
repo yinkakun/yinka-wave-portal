@@ -1,48 +1,9 @@
-import { useAccount, useEnsName, useBalance } from "wagmi";
+import { useAccount, useEnsName } from "wagmi";
 import { useConnect, useDisconnect } from "wagmi";
 import { Connector } from "wagmi";
 import { useCopyToClipboard } from "usehooks-ts";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import abbreviateETHBalance from "../utils/abbreviate-eth-balance";
-import formatAddress from "../utils/format-address";
-import formatENS from "../utils/format-ens";
-
-const ConnectWalletButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { isConnected, address } = useAccount();
-  const { data: balance } = useBalance({ addressOrName: address });
-  const { data: ensName } = useEnsName({ address });
-  const balanceInNumber = parseFloat(balance?.formatted || "0");
-
-  const formattedEns = ensName ? formatENS(ensName) : null;
-  const formattedAddress = address ? formatAddress(address) : null;
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
-  return (
-    <Fragment>
-      <button onClick={openModal}>
-        <div className="px-6 bg-white bg-opacity-50 shadow-none rounded-full py-2 text-rose-500 capitalize border-2 border-white hover:border-rose-300 ease-linear duration-300">
-          {isConnected ? (
-            <span className="flex gap-3">
-              <div>
-                <span>{abbreviateETHBalance(balanceInNumber)}</span>{" "}
-                <span>{balance?.symbol}</span>
-              </div>
-
-              <span>{formattedEns || formattedAddress}</span>
-            </span>
-          ) : (
-            <span>Connect Wallet</span>
-          )}
-        </div>
-      </button>
-      <ConnectWalletModal isOpen={isOpen} onClose={closeModal} />
-    </Fragment>
-  );
-};
+import { Fragment } from "react";
 
 const RINKEBY_CHAIN_ID = 4;
 
@@ -98,8 +59,6 @@ const ConnectWalletModal = ({ isOpen, onClose }: ConnectWalletModalProps) => {
 };
 
 export default ConnectWalletModal;
-
-export { ConnectWalletButton };
 
 const WallletConnectors = () => {
   const { connect, connectors, isLoading, pendingConnector } = useConnect({

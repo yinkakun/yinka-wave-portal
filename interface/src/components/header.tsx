@@ -1,4 +1,4 @@
-import { ConnectWalletButton } from "./connect-wallet";
+import ConnectWalletButton from "./connect-wallet-button";
 
 const Header = () => {
   return (

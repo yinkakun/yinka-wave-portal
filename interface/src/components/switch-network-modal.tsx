@@ -1,8 +1,6 @@
-import useIsSupportedChain from "../hooks/use-is-supported-chain";
 import { Dialog, Transition } from "@headlessui/react";
-import { useAccount, useDisconnect } from "wagmi";
 import { useSwitchNetwork } from "wagmi";
-import { Fragment, Dispatch, SetStateAction } from "react";
+import { Fragment } from "react";
 
 interface SwitchNetworkModalProps {
   isOpen: boolean;
