@@ -9,3 +9,13 @@ body,
   @apply bg-gradient-to-l from-rose-200 via-orange-200 to-rose-200;
   @apply bg-[length:400%] animate-bg-position;
 }
+
+@layer base {
+  html {
+    @apply font-sans;
+  }
+
+  a {
+    @apply text-rose-400 hover:text-rose-600 duration-300;
+  }
+}
